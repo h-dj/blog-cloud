@@ -4,8 +4,9 @@ package cn.hdj.common.config;
 import cn.hdj.common.domain.vo.ResultVO;
 import cn.hdj.common.enums.ResponseCodeEnum;
 import cn.hdj.common.exception.BaseException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import cn.hdj.common.exception.RecordRepeatException;
+import cn.hdj.common.exception.UserNotFoundException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
@@ -18,9 +19,9 @@ import org.springframework.web.servlet.NoHandlerFoundException;
  * @Description: 全局异常处理
  * @Author huangjiajian
  */
-@RestControllerAdvice
+@Slf4j
+@ControllerAdvice
 public class GlobalExceptionHandler {
-    private Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
     /**
      * 全局异常类中定义的异常都可以被拦截，只是触发条件不一样，如IO异常这种必须抛出异常到
@@ -47,7 +48,11 @@ public class GlobalExceptionHandler {
      * @param ex 异常信息
      * @return 返回前端异常信息
      */
-    @ExceptionHandler(BaseException.class)
+    @ExceptionHandler({
+            BaseException.class,
+            RecordRepeatException.class,
+            UserNotFoundException.class
+    })
     @ResponseBody
     public ResultVO exception(BaseException ex) {
         log.error("错误详情：" + ex.getMessage(), ex);
@@ -90,16 +95,20 @@ public class GlobalExceptionHandler {
         return ResultVO.errorJson(message);
     }
 
+
     /**
-     * 系统其它异常
+     * 系统其它异常(兜底)
      *
      * @param e
      * @return
      */
     @ResponseBody
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    @ExceptionHandler(Exception.class)
-    public ResultVO handleException(Exception e) {
+    @ExceptionHandler({
+            Exception.class,
+            RuntimeException.class
+    })
+    public ResultVO handleException(Throwable e) {
         log.error("错误详情：" + e.getMessage(), e);
         return ResultVO.errorJson(e.getMessage());
     }

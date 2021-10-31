@@ -3,11 +3,14 @@ package cn.hdj.admin.controller;
 
 import cn.hdj.admin.domain.dto.UserFormDTO;
 import cn.hdj.admin.domain.dto.UserSearchForm;
+import cn.hdj.admin.domain.vo.UserDetailVO;
 import cn.hdj.admin.service.IUserService;
+import cn.hdj.common.domain.vo.PageVO;
 import cn.hdj.common.domain.vo.ResultVO;
 import cn.hdj.common.validator.ValidatorUtils;
 import cn.hdj.common.validator.group.AddGroup;
 import cn.hdj.common.validator.group.UpdateGroup;
+import cn.hutool.core.collection.CollectionUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -52,7 +55,8 @@ public class UserController {
     @GetMapping(value = "/info/{userId}")
     @ApiOperation(value = "获取用户信息", httpMethod = "GET", response = ResultVO.class)
     public ResultVO getUserInfo(@PathVariable("userId") Long userId) {
-        return ResultVO.successJson(service.getUserInfo(userId));
+        UserDetailVO userInfo = service.getUserInfo(userId);
+        return ResultVO.successJson(userInfo);
     }
 
 
@@ -64,8 +68,9 @@ public class UserController {
      */
     @GetMapping(value = "/list")
     @ApiOperation(value = "获取用户列表", httpMethod = "GET", response = ResultVO.class)
-    public ResultVO listUser(@ApiParam UserSearchForm params) {
-        return ResultVO.successJson(service.listUser(params));
+    public ResultVO<PageVO> listUser(@ApiParam UserSearchForm params) {
+        PageVO pageVO = service.listUser(params);
+        return ResultVO.successJson(pageVO);
     }
 
 
@@ -103,7 +108,7 @@ public class UserController {
     @DeleteMapping(value = "/delete")
     @ApiOperation(value = "删除多个用户", httpMethod = "DELETE", response = ResultVO.class)
     public ResultVO deleteUser(@ApiParam("userIds") @RequestBody List<Long> userIds) {
-        if (userIds != null && userIds.size() > 0) {
+        if (CollectionUtil.isNotEmpty(userIds)) {
             service.deleteBatch(userIds);
         }
         return ResultVO.successJson();

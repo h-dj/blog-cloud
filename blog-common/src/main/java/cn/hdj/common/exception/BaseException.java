@@ -12,7 +12,12 @@ public class BaseException extends RuntimeException {
     private Integer code;
 
     public BaseException(String message, Integer code) {
-        super(message, null, false, false);
+        super(message, null, false, true);
+        this.code = code;
+    }
+
+    public BaseException(String message, Integer code,boolean writableStackTrace) {
+        super(message, null, false, writableStackTrace);
         this.code = code;
     }
 

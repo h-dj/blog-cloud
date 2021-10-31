@@ -7,7 +7,7 @@ import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 /**
  * @Description: TODO(这里用一句话描述这个类的作用)
@@ -40,13 +40,13 @@ public class MyBatisPlusConfig {
             //插入时，填充createTime 和updateTime字段
             @Override
             public void insertFill(MetaObject metaObject) {
-                this.setFieldValByName("createTime", new Date(), metaObject);
-                this.setFieldValByName("updateTime", new Date(), metaObject);
+                this.setFieldValByName("createTime", LocalDateTime.now(), metaObject);
+                this.setFieldValByName("updateTime",LocalDateTime.now(), metaObject);
             }
 
             @Override
             public void updateFill(MetaObject metaObject) {
-                this.setFieldValByName("updateTime", new Date(), metaObject);
+                this.setFieldValByName("updateTime", LocalDateTime.now(), metaObject);
             }
         };
     }

@@ -1,8 +1,8 @@
 package cn.hdj.admin.service;
 
-import cn.hdj.admin.domain.dto.UserDetailDTO;
 import cn.hdj.admin.domain.dto.UserFormDTO;
 import cn.hdj.admin.domain.dto.UserSearchForm;
+import cn.hdj.admin.domain.vo.UserDetailVO;
 import cn.hdj.admin.po.UserPO;
 import cn.hdj.common.domain.vo.PageVO;
 import cn.hdj.common.domain.vo.ResultVO;
@@ -55,7 +55,7 @@ public interface IUserService extends IService<UserPO> {
      * @param userId
      * @return
      */
-    UserDetailDTO getUserInfo(Long userId);
+    UserDetailVO getUserInfo(Long userId);
 
     /**
      * 删除多个用户

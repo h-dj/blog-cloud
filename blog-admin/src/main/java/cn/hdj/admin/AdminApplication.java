@@ -9,7 +9,12 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @Author huangjiajian
  * @Date 2021/10/28 下午11:50
  */
-@SpringBootApplication
+@SpringBootApplication(
+        scanBasePackages={
+                "cn.hdj.common.config",
+                "cn.hdj.admin"
+        }
+)
 public class AdminApplication {
     public static void main(String[] args) {
         SpringApplication.run(AdminApplication.class, args);

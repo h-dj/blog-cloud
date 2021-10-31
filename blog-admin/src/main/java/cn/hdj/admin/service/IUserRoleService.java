@@ -3,6 +3,8 @@ package cn.hdj.admin.service;
 import cn.hdj.admin.po.UserRolePO;
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import java.util.List;
+
 /**
  * <p>
  * 用户角色 服务类
@@ -13,4 +15,11 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface IUserRoleService extends IService<UserRolePO> {
 
+
+    /**
+     * 删除用户角色关联
+     *
+     * @param roleIds
+     */
+    void deleteBatchByRoleId(List<Long> roleIds);
 }
