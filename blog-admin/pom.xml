@@ -6,6 +6,7 @@
         <artifactId>blog-cloud</artifactId>
         <groupId>cn.hdj</groupId>
         <version>0.0.1-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -19,6 +20,13 @@
 
 
     <dependencies>
+        <!--通用依赖-->
+        <dependency>
+            <groupId>cn.hdj</groupId>
+            <artifactId>blog-common</artifactId>
+        </dependency>
+
+
         <!-- web依赖 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -31,7 +39,6 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
-
 
 
         <dependency>
@@ -58,13 +65,48 @@
         <dependency>
             <groupId>com.github.xiaoymin</groupId>
             <artifactId>knife4j-spring-boot-starter</artifactId>
+            <exclusions>
+                <exclusion>
+                    <artifactId>swagger-annotations</artifactId>
+                    <groupId>io.swagger</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>guava</artifactId>
+                    <groupId>com.google.guava</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>
-            <groupId>cn.hdj</groupId>
-            <artifactId>blog-common</artifactId>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
         </dependency>
 
+        <dependency>
+            <artifactId>swagger-annotations</artifactId>
+            <groupId>io.swagger</groupId>
+        </dependency>
+
+        <!--引入nacos 服务发现-->
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
+        </dependency>
+
+        <!--配置中心-->
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
+        </dependency>
+
+
+        <!--Spring Cloud 2020.0.0  boostrap.yml 不生效
+                 https://docs.spring.io/spring-cloud-config/docs/current/reference/html/#config-first-bootstrap
+        -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-bootstrap</artifactId>
+        </dependency>
 
     </dependencies>
 
@@ -96,29 +138,23 @@
     </profiles>
 
     <build>
-        <filters>
-            <filter>src/main/resources/application.yml</filter>
-        </filters>
         <resources>
             <!-- 处理application.yml　文件中的变量-->
             <resource>
                 <directory>src/main/resources</directory>
-                <includes>
-                    <include>application.yml</include>
-                </includes>
                 <filtering>true</filtering>
             </resource>
-
-            <resource>
-                <directory>src/main/resources</directory>
-                <includes>
-                    <include>application-${profile.active}.yml</include>
-                    <include>banner.txt</include>
-                    <include>mapper/*.xml</include>
-                </includes>
-                <filtering>false</filtering>
-            </resource>
         </resources>
+
+
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>2.5.5</version>
+            </plugin>
+        </plugins>
+
     </build>
 
 </project>

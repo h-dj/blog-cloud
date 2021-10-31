@@ -28,6 +28,8 @@
         <velocity.version>2.3</velocity.version>
         <knife4j.version>3.0.2</knife4j.version>
         <blog-common.version>0.0.1-SNAPSHOT</blog-common.version>
+        <swagger.version>1.5.22</swagger.version>
+        <guava.version>31.0.1-jre</guava.version>
     </properties>
 
 
@@ -62,6 +64,7 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+
 
             <!--4. SpringCloud Alibaba-->
             <dependency>
@@ -125,6 +128,17 @@
                 <version>${blog-common.version}</version>
             </dependency>
 
+            <dependency>
+                <artifactId>swagger-annotations</artifactId>
+                <groupId>io.swagger</groupId>
+                <version>${swagger.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>${guava.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
