@@ -1,6 +1,9 @@
 package cn.hdj.admin.controller;
 
 
+import cn.dev33.satoken.stp.SaTokenInfo;
+import cn.dev33.satoken.stp.StpUtil;
+import cn.hdj.admin.domain.dto.LoginFormDTO;
 import cn.hdj.admin.domain.dto.UserFormDTO;
 import cn.hdj.admin.domain.dto.UserSearchForm;
 import cn.hdj.admin.domain.vo.UserDetailVO;
@@ -17,6 +20,7 @@ import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 /**
@@ -37,6 +41,29 @@ public class UserController {
 
 
     /**
+     * 登陆
+     *
+     * @param user
+     * @param response
+     * @return
+     */
+    @PostMapping(value = "/signIn")
+    @ApiOperation(value = "登陆", httpMethod = "POST", response = ResultVO.class)
+    public ResultVO login(@RequestBody LoginFormDTO user, HttpServletResponse response) {
+        SaTokenInfo login = this.service.login(user);
+        return ResultVO.successJson(login);
+    }
+
+    @PutMapping("/logout")
+    @ApiOperation(value = "退出登录", httpMethod = "PUT", response = ResultVO.class)
+    public ResultVO logout() {
+        // 当前会话注销登录
+        StpUtil.logout();
+        return ResultVO.successJson();
+    }
+
+
+    /**
      * 获取当前登陆用户信息
      *
      * @return
@@ -44,7 +71,9 @@ public class UserController {
     @GetMapping(value = "/info")
     @ApiOperation(value = "获取当前用户信息", httpMethod = "GET", response = ResultVO.class)
     public ResultVO getUserInfo() {
-        return ResultVO.successJson(null);
+        Long loginId = StpUtil.getLoginIdAsLong();
+        UserDetailVO userInfo = this.service.getUserInfo(loginId);
+        return ResultVO.successJson(userInfo);
     }
 
     /**
@@ -72,7 +101,6 @@ public class UserController {
         PageVO pageVO = service.listUser(params);
         return ResultVO.successJson(pageVO);
     }
-
 
 
     @PostMapping(value = "/add")

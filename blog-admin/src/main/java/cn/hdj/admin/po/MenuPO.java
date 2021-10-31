@@ -50,7 +50,7 @@ public class MenuPO implements Serializable {
     @ApiModelProperty("权限标识")
     private String permission;
 
-    @ApiModelProperty("链接")
+    @ApiModelProperty("前端路由")
     private String url;
 
     @ApiModelProperty("创建时间")
@@ -72,6 +72,9 @@ public class MenuPO implements Serializable {
 
     @ApiModelProperty("是否隐藏")
     private Boolean hidden;
+
+    @ApiModelProperty("请求url")
+    private String requestUrl;
 
 
 }

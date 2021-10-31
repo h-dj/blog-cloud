@@ -14,7 +14,7 @@ import java.util.Set;
  */
 @Setter
 @Getter
-public class UserDetailDTO {
+public class UserDetailDTO implements java.io.Serializable {
 
     private static final long serialVersionUID = -2826126367541073780L;
     /**

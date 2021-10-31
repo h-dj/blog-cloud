@@ -1,5 +1,10 @@
 package cn.hdj.admin.service.impl;
 
+import cn.dev33.satoken.secure.SaSecureUtil;
+import cn.dev33.satoken.stp.SaTokenInfo;
+import cn.dev33.satoken.stp.StpUtil;
+import cn.hdj.admin.domain.dto.LoginFormDTO;
+import cn.hdj.admin.domain.dto.RoleMenuPermissionDTO;
 import cn.hdj.admin.domain.dto.UserFormDTO;
 import cn.hdj.admin.domain.dto.UserSearchForm;
 import cn.hdj.admin.domain.vo.UserDetailVO;
@@ -13,11 +18,13 @@ import cn.hdj.common.consts.SysConst;
 import cn.hdj.common.domain.vo.PageVO;
 import cn.hdj.common.domain.vo.ResultVO;
 import cn.hdj.common.enums.ResponseCodeEnum;
+import cn.hdj.common.exception.AccountInValidException;
 import cn.hdj.common.exception.BaseException;
 import cn.hdj.common.exception.RecordRepeatException;
 import cn.hdj.common.exception.UserNotFoundException;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.util.BooleanUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
@@ -87,7 +94,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserPO> implements 
     public void editUser(Long userId, UserFormDTO user) {
         long count = this.count(Wrappers.<UserPO>lambdaQuery()
                 .eq(UserPO::getEmail, user.getEmail())
-                .ne(UserPO::getId,userId)
+                .ne(UserPO::getId, userId)
                 .eq(UserPO::getDeleted, false)
         );
         if (count > 0) {
@@ -145,7 +152,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserPO> implements 
 
     @Override
     public List<Long> findAllMenuForUser(Long userId) {
-        return null;
+        return baseMapper.findAllMenuForUser(userId);
     }
 
 
@@ -177,4 +184,45 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserPO> implements 
     public void profile(UserFormDTO userForm) {
 
     }
+
+    @Override
+    public SaTokenInfo login(LoginFormDTO user) {
+        //判断是否已登录
+        if (StpUtil.isLogin()) {
+            return StpUtil.getTokenInfo();
+        }
+
+        //查询用户
+        List<UserPO> list = this.list(Wrappers.<UserPO>lambdaQuery()
+                .eq(UserPO::getEmail, user.getAccount())
+                .eq(UserPO::getDeleted, false)
+        );
+        if (CollectionUtil.isEmpty(list)) {
+            throw new AccountInValidException("账号或密码错误！");
+        }
+        if (list.size() > 1) {
+            throw new AccountInValidException();
+        }
+        UserPO userPO = list.get(0);
+        if (userPO.getDeleted()) {
+            throw new AccountInValidException("账号已注销！");
+        }
+        if (!BooleanUtil.isTrue(userPO.getEnable())) {
+            throw new AccountInValidException("账号被禁用！");
+        }
+        String encryptPassword = SaSecureUtil.md5BySalt(user.getPassword(), userPO.getSalt());
+        if (!StrUtil.equals(encryptPassword, userPO.getPassword())) {
+            throw new AccountInValidException("账号或密码错误！");
+        }
+        //保存当前登录的userID
+        StpUtil.login(userPO.getId());
+        //返回token
+        return StpUtil.getTokenInfo();
+    }
+
+    @Override
+    public List<RoleMenuPermissionDTO> getPermissionList(Object loginId) {
+        return this.baseMapper.getPermissionList(loginId);
+    }
+
 }

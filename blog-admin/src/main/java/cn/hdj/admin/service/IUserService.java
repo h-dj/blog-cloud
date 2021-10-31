@@ -1,5 +1,8 @@
 package cn.hdj.admin.service;
 
+import cn.dev33.satoken.stp.SaTokenInfo;
+import cn.hdj.admin.domain.dto.LoginFormDTO;
+import cn.hdj.admin.domain.dto.RoleMenuPermissionDTO;
 import cn.hdj.admin.domain.dto.UserFormDTO;
 import cn.hdj.admin.domain.dto.UserSearchForm;
 import cn.hdj.admin.domain.vo.UserDetailVO;
@@ -87,4 +90,21 @@ public interface IUserService extends IService<UserPO> {
      * @param userForm
      */
     void profile(UserFormDTO userForm);
+
+    /**
+     * 登录
+     *
+     * @param user
+     * @return
+     */
+    SaTokenInfo login(LoginFormDTO user);
+
+    /**
+     * 获取当前登录用户的权限标识 和 角色编码
+     *
+     * @param loginId
+     * @return
+     */
+    List<RoleMenuPermissionDTO> getPermissionList(Object loginId);
+
 }

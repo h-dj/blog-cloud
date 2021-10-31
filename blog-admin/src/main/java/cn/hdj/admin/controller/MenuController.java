@@ -1,6 +1,7 @@
 package cn.hdj.admin.controller;
 
 
+import cn.dev33.satoken.stp.StpUtil;
 import cn.hdj.admin.po.MenuPO;
 import cn.hdj.admin.service.IMenuService;
 import cn.hdj.common.domain.vo.ResultVO;
@@ -35,7 +36,9 @@ public class MenuController {
     @GetMapping("/nav")
     @ApiOperation(value = "获取侧边栏导航", httpMethod = "GET", response = ResultVO.class)
     public ResultVO nav() {
-        return ResultVO.successJson(this.service.listForUser(null));
+        long loginIdAsLong = StpUtil.getLoginIdAsLong();
+
+        return ResultVO.successJson(this.service.listForUser(loginIdAsLong));
     }
 
 

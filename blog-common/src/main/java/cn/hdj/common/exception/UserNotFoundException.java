@@ -15,4 +15,10 @@ public class UserNotFoundException extends BaseException {
                 , ResponseCodeEnum.ACCOUNT_NOT_EXIST.getCode()
                 , false);
     }
+
+    public UserNotFoundException(String msg) {
+        super(msg
+                , ResponseCodeEnum.ACCOUNT_NOT_EXIST.getCode()
+                , false);
+    }
 }

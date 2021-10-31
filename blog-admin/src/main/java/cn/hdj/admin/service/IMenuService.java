@@ -1,5 +1,6 @@
 package cn.hdj.admin.service;
 
+import cn.hdj.admin.domain.dto.RoleMenuPermissionDTO;
 import cn.hdj.admin.po.MenuPO;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -22,4 +23,11 @@ public interface IMenuService extends IService<MenuPO> {
      * @return
      */
     List<MenuPO> listForUser(Long userId);
+
+    /**
+     * 获取权限编码与请求url 的映射关系
+     *
+     * @return
+     */
+    List<RoleMenuPermissionDTO> queryDynamicPermissionList();
 }

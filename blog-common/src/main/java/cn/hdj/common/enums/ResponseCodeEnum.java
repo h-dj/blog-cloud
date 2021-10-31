@@ -27,6 +27,8 @@ public enum ResponseCodeEnum {
     ACCOUNT_NOT_EXIST(605, "账户不存在！"),
     RECORD_REPEAT(606, "数据重复！"),
     PARAM_INVALID(607, "参数非法异常！"),
+    ACCOUNT_INVALID(608, "账号非法！"),
+    TOKEN_INVALID(609, "Token非法！"),
 
     ;
 

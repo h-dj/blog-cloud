@@ -1,11 +1,11 @@
 package cn.hdj.common.config;
 
 
+import cn.dev33.satoken.exception.NotLoginException;
+import cn.dev33.satoken.exception.NotPermissionException;
 import cn.hdj.common.domain.vo.ResultVO;
 import cn.hdj.common.enums.ResponseCodeEnum;
 import cn.hdj.common.exception.BaseException;
-import cn.hdj.common.exception.RecordRepeatException;
-import cn.hdj.common.exception.UserNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindException;
@@ -42,17 +42,32 @@ public class GlobalExceptionHandler {
 
     }
 
+
+    @ExceptionHandler({
+            NotPermissionException.class
+    })
+    @ResponseBody
+    public ResultVO exception(NotPermissionException ex) {
+        log.error("错误详情：" + ex.getMessage());
+        return ResultVO.errorJson(ex.getMessage(), ResponseCodeEnum.NO_AUTH.getCode());
+    }
+
+    @ExceptionHandler({
+            NotLoginException.class
+    })
+    @ResponseBody
+    public ResultVO exception(NotLoginException ex) {
+        log.error("错误详情：" + ex.getMessage());
+        return ResultVO.errorJson(ex.getMessage(), ResponseCodeEnum.TOKEN_INVALID.getCode());
+    }
+
     /**
      * 处理自定义异常
      *
      * @param ex 异常信息
      * @return 返回前端异常信息
      */
-    @ExceptionHandler({
-            BaseException.class,
-            RecordRepeatException.class,
-            UserNotFoundException.class
-    })
+    @ExceptionHandler(BaseException.class)
     @ResponseBody
     public ResultVO exception(BaseException ex) {
         log.error("错误详情：" + ex.getMessage(), ex);
