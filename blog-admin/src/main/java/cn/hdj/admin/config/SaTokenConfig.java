@@ -19,13 +19,12 @@ import java.util.List;
  * @Author huangjiajian
  * @Date 2021/10/31 下午10:34
  */
-@Configuration
+//@Configuration
 public class SaTokenConfig implements WebMvcConfigurer {
 
 
     @Autowired
     private IMenuService menuService;
-
 
     /**
      * 注册拦截器

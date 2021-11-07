@@ -25,6 +25,7 @@ import cn.hdj.common.exception.UserNotFoundException;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.BooleanUtil;
+import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
@@ -73,7 +74,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserPO> implements 
         if (count > 0) {
             throw new RecordRepeatException("邮箱已注册！");
         }
-        userPO.setSalt("123456");
+        userPO.setSalt(IdUtil.simpleUUID());
+        userPO.setPassword(SaSecureUtil.md5BySalt(userPO.getPassword(),userPO.getSalt()));
         this.baseMapper.insert(userPO);
         Set<Long> roleIds = user.getRoleIds();
         if (CollectionUtil.isNotEmpty(roleIds)) {
@@ -140,7 +142,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserPO> implements 
             throw new BaseException("系统管理员不能删除", ResponseCodeEnum.ERROR.getCode());
         }
 
-        if (CollectionUtil.contains(userIds, 999)) {
+        if (CollectionUtil.contains(userIds, StpUtil.getLoginIdAsLong())) {
             throw new BaseException("当前用户不能删除", ResponseCodeEnum.ERROR.getCode());
         }
         userRoleService.remove(Wrappers.<UserRolePO>lambdaQuery().in(UserRolePO::getUserId, userIds));

@@ -1,0 +1,36 @@
+server:
+  port: 8182
+
+spring:
+  profiles:
+    active: '@profile.active@'
+  application:
+    name: cloud-gateway
+  cloud:
+    nacos:
+      discovery:
+        #服务发现地址
+        server-addr: http://192.168.43.178:8848
+      config:
+        # 配置中心地址
+        server-addr: http://192.168.43.178:8848
+        # 修改文件扩展名
+        file-extension: yaml
+        # 缺省即可
+        group: DEFAULT_GROUP
+        # 缺省即可: 配置文件名前缀
+        prefix: ${spring.application.name}
+    gateway:
+      discovery:
+        locator:
+          enabled: true # 启用自动根据服务ID生成路由
+          lower-case-service-id: true # 设置路由的路径为小写的服务ID
+      routes:
+        - id: blog-admin
+          uri: lb://blog-admin
+          predicates:
+            #匹配路由
+            - Path=/blog-admin/**
+          filters:
+            #在转发时移除cloud-admin前缀
+            - StripPrefix=1

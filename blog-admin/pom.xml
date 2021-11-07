@@ -26,7 +26,6 @@
             <artifactId>blog-common</artifactId>
         </dependency>
 
-
         <!-- web依赖 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -98,16 +97,6 @@
             <groupId>com.alibaba.cloud</groupId>
             <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
         </dependency>
-
-
-        <!--Spring Cloud 2020.0.0  boostrap.yml 不生效
-                 https://docs.spring.io/spring-cloud-config/docs/current/reference/html/#config-first-bootstrap
-        -->
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-bootstrap</artifactId>
-        </dependency>
-
 
         <dependency>
             <groupId>cn.dev33</groupId>

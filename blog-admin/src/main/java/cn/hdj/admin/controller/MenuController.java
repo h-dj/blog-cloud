@@ -63,7 +63,6 @@ public class MenuController {
     public ResultVO select() {
         List<MenuPO> list = this.service.list(Wrappers.<MenuPO>lambdaQuery()
                 .select(MenuPO::getId,MenuPO::getMenuName,MenuPO::getParentId)
-                .ne(MenuPO::getType,2)
                 .eq(MenuPO::getDeleted, false)
         );
         return ResultVO.successJson(list);

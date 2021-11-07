@@ -32,7 +32,7 @@ public class StpInterfaceImpl implements StpInterface {
         if (CollectionUtil.isNotEmpty(permissionList)) {
             return permissionList.stream()
                     .map(RoleMenuPermissionDTO::getPermissionCode)
-                    .filter(StrUtil::isEmpty)
+                    .filter(StrUtil::isNotEmpty)
                     .distinct()
                     .collect(Collectors.toList());
         }
@@ -45,7 +45,7 @@ public class StpInterfaceImpl implements StpInterface {
         if (CollectionUtil.isNotEmpty(permissionList)) {
             return permissionList.stream()
                     .map(RoleMenuPermissionDTO::getRoleCode)
-                    .filter(StrUtil::isEmpty)
+                    .filter(StrUtil::isNotEmpty)
                     .distinct()
                     .collect(Collectors.toList());
         }
