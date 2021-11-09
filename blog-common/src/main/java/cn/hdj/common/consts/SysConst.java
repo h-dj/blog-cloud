@@ -8,17 +8,6 @@ package cn.hdj.common.consts;
 public class SysConst {
 
     /**
-     * token 过期时间
-     */
-    public final static int SYSTEM_TOKEN_TIMEOUT = 36000;
-
-
-    /**
-     * token header键
-     */
-    public static final String SYSTEM_TOKEN_HEADER = "blog-auth-token";
-
-    /**
      * 本机地址
      */
     public static final String REGION = "127.0.0.1";
@@ -28,4 +17,15 @@ public class SysConst {
      * 超级管理员账号id
      */
     public static final Long SUPER_ADMIN = 0L;
+    /**
+     * 用户登录key 前缀
+     */
+    public static final String LOGIN_USER_PREFIX = "blog:login:";
+
+    /**
+     * 菜单权限  key
+     */
+    public static final String MENU_PERMISSON = "blog:menu:permisson";
+
+
 }

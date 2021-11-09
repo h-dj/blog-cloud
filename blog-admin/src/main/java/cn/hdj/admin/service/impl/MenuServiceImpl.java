@@ -1,11 +1,11 @@
 package cn.hdj.admin.service.impl;
 
-import cn.hdj.admin.domain.dto.RoleMenuPermissionDTO;
 import cn.hdj.admin.mapper.MenuMapper;
 import cn.hdj.admin.po.MenuPO;
 import cn.hdj.admin.service.IMenuService;
 import cn.hdj.admin.service.IUserService;
 import cn.hdj.common.consts.SysConst;
+import cn.hdj.common.domain.dto.RoleMenuPermissionDTO;
 import cn.hutool.core.collection.CollectionUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;

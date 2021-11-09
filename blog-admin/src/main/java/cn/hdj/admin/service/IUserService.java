@@ -1,12 +1,13 @@
 package cn.hdj.admin.service;
 
 import cn.dev33.satoken.stp.SaTokenInfo;
-import cn.hdj.admin.domain.dto.LoginFormDTO;
-import cn.hdj.admin.domain.dto.RoleMenuPermissionDTO;
 import cn.hdj.admin.domain.dto.UserFormDTO;
 import cn.hdj.admin.domain.dto.UserSearchForm;
 import cn.hdj.admin.domain.vo.UserDetailVO;
 import cn.hdj.admin.po.UserPO;
+import cn.hdj.common.domain.dto.LoginFormDTO;
+import cn.hdj.common.domain.dto.RoleMenuPermissionDTO;
+import cn.hdj.common.domain.dto.UserDetailDTO;
 import cn.hdj.common.domain.vo.PageVO;
 import cn.hdj.common.domain.vo.ResultVO;
 import com.baomidou.mybatisplus.extension.service.IService;
@@ -92,11 +93,12 @@ public interface IUserService extends IService<UserPO> {
     void profile(UserFormDTO userForm);
 
     /**
-     * 登录
+     * 登录(迁移到认证中心 blog-auth)
      *
      * @param user
      * @return
      */
+    @Deprecated
     SaTokenInfo login(LoginFormDTO user);
 
     /**
@@ -107,4 +109,10 @@ public interface IUserService extends IService<UserPO> {
      */
     List<RoleMenuPermissionDTO> getPermissionList(Object loginId);
 
+    /**
+     * 获取用户信息
+     * @param account
+     * @return
+     */
+    UserDetailDTO loadUserByUsername(String account);
 }

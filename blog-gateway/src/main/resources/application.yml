@@ -5,7 +5,7 @@ spring:
   profiles:
     active: '@profile.active@'
   application:
-    name: cloud-gateway
+    name: blog-gateway
   cloud:
     nacos:
       discovery:
@@ -20,6 +20,8 @@ spring:
         group: DEFAULT_GROUP
         # 缺省即可: 配置文件名前缀
         prefix: ${spring.application.name}
+    bootstrap:
+      enabled: false
     gateway:
       discovery:
         locator:
@@ -30,7 +32,31 @@ spring:
           uri: lb://blog-admin
           predicates:
             #匹配路由
-            - Path=/blog-admin/**
-          filters:
-            #在转发时移除cloud-admin前缀
-            - StripPrefix=1
+            - Path=/api/admin/**
+        - id: blog-auth
+          uri: lb://blog-auth
+          predicates:
+            #匹配路由
+            - Path=/api/auth/**
+  # redis配置
+  redis:
+    # Redis数据库索引（默认为0）
+    database: 0
+    # Redis服务器地址
+    host: 192.168.43.178
+    # Redis服务器连接端口
+    port: 6379
+    # Redis服务器连接密码（默认为空）
+    password: 123456
+    # 连接超时时间
+    timeout: 10s
+    lettuce:
+      pool:
+        # 连接池最大连接数
+        max-active: 200
+        # 连接池最大阻塞等待时间（使用负值表示没有限制）
+        max-wait: -1ms
+        # 连接池中的最大空闲连接
+        max-idle: 10
+        # 连接池中的最小空闲连接
+        min-idle: 0

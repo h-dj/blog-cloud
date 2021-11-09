@@ -1,10 +1,11 @@
-package cn.hdj.admin.domain.dto;
+package cn.hdj.common.domain.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -14,7 +15,7 @@ import java.util.Set;
  */
 @Setter
 @Getter
-public class UserDetailDTO implements java.io.Serializable {
+public class UserDetailDTO  implements java.io.Serializable {
 
     private static final long serialVersionUID = -2826126367541073780L;
     /**
@@ -34,13 +35,11 @@ public class UserDetailDTO implements java.io.Serializable {
     /**
      * 密码
      */
-    @JsonIgnore
     private String password;
 
     /**
      * 加密盐
      */
-    @JsonIgnore
     private String salt;
 
     /**
@@ -96,5 +95,5 @@ public class UserDetailDTO implements java.io.Serializable {
     /**
      * 权限
      */
-    private Set<String> permissions;
+    private List<String> permissions;
 }

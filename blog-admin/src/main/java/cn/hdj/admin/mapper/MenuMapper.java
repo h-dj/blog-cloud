@@ -1,7 +1,7 @@
 package cn.hdj.admin.mapper;
 
-import cn.hdj.admin.domain.dto.RoleMenuPermissionDTO;
 import cn.hdj.admin.po.MenuPO;
+import cn.hdj.common.domain.dto.RoleMenuPermissionDTO;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 import java.util.List;

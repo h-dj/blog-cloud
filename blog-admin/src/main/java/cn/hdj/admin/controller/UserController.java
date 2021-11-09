@@ -3,11 +3,13 @@ package cn.hdj.admin.controller;
 
 import cn.dev33.satoken.stp.SaTokenInfo;
 import cn.dev33.satoken.stp.StpUtil;
-import cn.hdj.admin.domain.dto.LoginFormDTO;
 import cn.hdj.admin.domain.dto.UserFormDTO;
 import cn.hdj.admin.domain.dto.UserSearchForm;
 import cn.hdj.admin.domain.vo.UserDetailVO;
 import cn.hdj.admin.service.IUserService;
+import cn.hdj.common.domain.dto.LoginFormDTO;
+import cn.hdj.common.domain.dto.RoleMenuPermissionDTO;
+import cn.hdj.common.domain.dto.UserDetailDTO;
 import cn.hdj.common.domain.vo.PageVO;
 import cn.hdj.common.domain.vo.ResultVO;
 import cn.hdj.common.validator.ValidatorUtils;
@@ -41,21 +43,27 @@ public class UserController {
 
 
     /**
-     * 登陆
+     * 登陆(迁移到认证中心 blog-auth)
      *
      * @param user
      * @param response
      * @return
      */
-    @PostMapping(value = "/signIn")
-    @ApiOperation(value = "登陆", httpMethod = "POST", response = ResultVO.class)
+    @Deprecated
+//    @PostMapping(value = "/signIn")
+//    @ApiOperation(value = "登陆", httpMethod = "POST", response = ResultVO.class)
     public ResultVO login(@RequestBody LoginFormDTO user, HttpServletResponse response) {
         SaTokenInfo login = this.service.login(user);
         return ResultVO.successJson(login);
     }
 
-    @PutMapping("/logout")
-    @ApiOperation(value = "退出登录", httpMethod = "PUT", response = ResultVO.class)
+    /**
+     * (迁移到认证中心 blog-auth)
+     * @return
+     */
+    @Deprecated
+//    @PutMapping("/logout")
+//    @ApiOperation(value = "退出登录", httpMethod = "PUT", response = ResultVO.class)
     public ResultVO logout() {
         // 当前会话注销登录
         StpUtil.logout();
@@ -82,11 +90,31 @@ public class UserController {
      * @return
      */
     @GetMapping(value = "/info/{userId}")
-    @ApiOperation(value = "获取用户信息", httpMethod = "GET", response = ResultVO.class)
+    @ApiOperation(value = "获取用户信息ByUserId", httpMethod = "GET", response = ResultVO.class)
     public ResultVO getUserInfo(@PathVariable("userId") Long userId) {
         UserDetailVO userInfo = service.getUserInfo(userId);
         return ResultVO.successJson(userInfo);
     }
+
+    /**
+     * 获取用户信息
+     *
+     * @return
+     */
+    @GetMapping(value = "/loadUserByUsername")
+    @ApiOperation(value = "获取用户信息ByUserName", httpMethod = "GET", response = ResultVO.class)
+    public ResultVO<UserDetailDTO> loadUserByUsername(@RequestParam String account) {
+        UserDetailDTO userInfo = this.service.loadUserByUsername(account);
+        return ResultVO.successJson(userInfo);
+    }
+
+    @GetMapping(value = "/getPermissionList")
+    @ApiOperation(value = "获取用户权限", httpMethod = "GET", response = ResultVO.class)
+    public ResultVO<RoleMenuPermissionDTO> getPermissionList(@RequestParam Long loginId) {
+        List<RoleMenuPermissionDTO> permissionList = this.service.getPermissionList(loginId);
+        return ResultVO.successJson(permissionList);
+    }
+
 
 
     /**

@@ -1,4 +1,4 @@
-package cn.hdj.admin.domain.dto;
+package cn.hdj.common.domain.dto;
 
 import lombok.Getter;
 import lombok.Setter;

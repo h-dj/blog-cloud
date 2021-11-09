@@ -16,7 +16,8 @@ public enum ResponseCodeEnum {
     UNKNOWN(500, "系统内部错误，请联系管理员"),
     ERROR(400, "操作失败"),
     PATH_NOT_FOUND(404, "路径不存在，请检查路径"),
-    NO_AUTH(401, "抱歉，您没有访问权限！"),
+    NO_AUTH(401, "抱歉，你还没有认证！"),
+    FORBIDDEN(403, "抱歉，你没有访问权限！"),
 
 
     // 系统业务状态码： 从600 开始

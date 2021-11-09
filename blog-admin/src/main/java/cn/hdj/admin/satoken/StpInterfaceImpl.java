@@ -1,8 +1,8 @@
 package cn.hdj.admin.satoken;
 
 import cn.dev33.satoken.stp.StpInterface;
-import cn.hdj.admin.domain.dto.RoleMenuPermissionDTO;
 import cn.hdj.admin.service.IUserService;
+import cn.hdj.common.domain.dto.RoleMenuPermissionDTO;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,11 +13,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * @Description: 自定义权限验证接口扩展
+ * @Description: 自定义权限验证接口扩展(移植到网关，统一鉴权)
  * @Author huangjiajian
  * @Date 2021/10/31 下午10:24
  */
-@Component
+@Deprecated
+//@Component
 public class StpInterfaceImpl implements StpInterface {
 
 

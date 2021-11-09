@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.hdj.admin.mapper.MenuMapper">
 
-    <select id="queryDynamicPermissionList" resultType="cn.hdj.admin.domain.dto.RoleMenuPermissionDTO">
+    <select id="queryDynamicPermissionList" resultType="cn.hdj.common.domain.dto.RoleMenuPermissionDTO">
         SELECT DISTINCT tm.permission as permission_code,tm.request_url from t_menu tm
         where tm.deleted = '0' and tm.permission is not null and tm.request_url is not null
     </select>

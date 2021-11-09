@@ -1,7 +1,7 @@
 package cn.hdj.admin.mapper;
 
-import cn.hdj.admin.domain.dto.RoleMenuPermissionDTO;
 import cn.hdj.admin.po.UserPO;
+import cn.hdj.common.domain.dto.RoleMenuPermissionDTO;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Param;
 

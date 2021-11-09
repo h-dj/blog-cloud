@@ -3,8 +3,6 @@ package cn.hdj.admin.service.impl;
 import cn.dev33.satoken.secure.SaSecureUtil;
 import cn.dev33.satoken.stp.SaTokenInfo;
 import cn.dev33.satoken.stp.StpUtil;
-import cn.hdj.admin.domain.dto.LoginFormDTO;
-import cn.hdj.admin.domain.dto.RoleMenuPermissionDTO;
 import cn.hdj.admin.domain.dto.UserFormDTO;
 import cn.hdj.admin.domain.dto.UserSearchForm;
 import cn.hdj.admin.domain.vo.UserDetailVO;
@@ -15,6 +13,9 @@ import cn.hdj.admin.service.IRoleService;
 import cn.hdj.admin.service.IUserRoleService;
 import cn.hdj.admin.service.IUserService;
 import cn.hdj.common.consts.SysConst;
+import cn.hdj.common.domain.dto.LoginFormDTO;
+import cn.hdj.common.domain.dto.RoleMenuPermissionDTO;
+import cn.hdj.common.domain.dto.UserDetailDTO;
 import cn.hdj.common.domain.vo.PageVO;
 import cn.hdj.common.domain.vo.ResultVO;
 import cn.hdj.common.enums.ResponseCodeEnum;
@@ -27,6 +28,7 @@ import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.BooleanUtil;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -75,7 +77,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserPO> implements 
             throw new RecordRepeatException("邮箱已注册！");
         }
         userPO.setSalt(IdUtil.simpleUUID());
-        userPO.setPassword(SaSecureUtil.md5BySalt(userPO.getPassword(),userPO.getSalt()));
+        userPO.setPassword(SaSecureUtil.md5BySalt(userPO.getPassword(), userPO.getSalt()));
         this.baseMapper.insert(userPO);
         Set<Long> roleIds = user.getRoleIds();
         if (CollectionUtil.isNotEmpty(roleIds)) {
@@ -225,6 +227,34 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserPO> implements 
     @Override
     public List<RoleMenuPermissionDTO> getPermissionList(Object loginId) {
         return this.baseMapper.getPermissionList(loginId);
+    }
+
+    @Override
+    public UserDetailDTO loadUserByUsername(String account) {
+
+        LambdaQueryWrapper<UserPO> queryWrapper = Wrappers.<UserPO>lambdaQuery()
+                .eq(UserPO::getDeleted,false)
+                .eq(UserPO::getEnable,true)
+                .eq(UserPO::getEmail, account);
+        List<UserPO> userPOList = this.baseMapper.selectList(queryWrapper);
+        if (CollectionUtil.isEmpty(userPOList)) {
+            throw new UserNotFoundException();
+        }
+        if (userPOList.size() > 1) {
+            throw new AccountInValidException("账号重复 " + account);
+        }
+        UserDetailDTO userDetailDTO = BeanUtil.copyProperties(userPOList.get(0), UserDetailDTO.class);
+
+        List<RoleMenuPermissionDTO> permissionList = this.getPermissionList(userDetailDTO.getId());
+        if (CollectionUtil.isNotEmpty(permissionList)) {
+            List<String> permissionCodeList = permissionList.stream()
+                    .map(RoleMenuPermissionDTO::getPermissionCode)
+                    .distinct()
+                    .collect(Collectors.toList());
+            userDetailDTO.setPermissions(permissionCodeList);
+        }
+
+        return userDetailDTO;
     }
 
 }
