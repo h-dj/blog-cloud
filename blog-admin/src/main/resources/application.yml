@@ -44,6 +44,10 @@ spring:
       discovery:
         #注册中心地址
         server-addr: http://192.168.43.178:8848
+        metadata:
+          # 在获取服务实例时，验证用户名密码
+          user-name: ${spring.boot.admin.client.username}
+          user-password: ${spring.boot.admin.client.password}
       config:
         # 配置中心地址
         server-addr: http://192.168.43.178:8848
@@ -55,7 +59,11 @@ spring:
         prefix: ${spring.application.name}
     bootstrap:
       enabled: false
-
+  boot:
+    admin:
+      client:
+        password: admin001
+        username: admin
 # Sa-Token配置(这里只用来验证 token )
 sa-token:
   # token名称 (同时也是cookie名称)
@@ -80,3 +88,10 @@ mybatis-plus:
   mapper-locations: classpath*:/mapper/**/*.xml  #mapper.xml文件路径
   configuration:
     map-underscore-to-camel-case: true #驼峰
+
+# 配置暴露所有监控端点
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'

@@ -32,6 +32,7 @@
         <guava.version>31.0.1-jre</guava.version>
         <sa-token.version>1.28.0</sa-token.version>
         <redisson.version>3.16.4</redisson.version>
+        <spring-boot-admin.version>2.4.1</spring-boot-admin.version>
     </properties>
 
 
@@ -161,6 +162,18 @@
                 <artifactId>sa-token-reactor-spring-boot-starter</artifactId>
                 <version>${sa-token.version}</version>
             </dependency>
+
+            <dependency>
+                <groupId>de.codecentric</groupId>
+                <artifactId>spring-boot-admin-starter-server</artifactId>
+                <version>${spring-boot-admin.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>de.codecentric</groupId>
+                <artifactId>spring-boot-admin-starter-client</artifactId>
+                <version>${spring-boot-admin.version}</version>
+            </dependency>
+
 
         </dependencies>
     </dependencyManagement>

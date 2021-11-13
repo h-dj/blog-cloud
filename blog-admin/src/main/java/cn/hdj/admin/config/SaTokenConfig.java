@@ -1,13 +1,21 @@
 package cn.hdj.admin.config;
 
+import cn.dev33.satoken.basic.SaBasicUtil;
+import cn.dev33.satoken.context.SaHolder;
+import cn.dev33.satoken.filter.SaServletFilter;
 import cn.dev33.satoken.interceptor.SaRouteInterceptor;
+import cn.dev33.satoken.router.SaHttpMethod;
 import cn.dev33.satoken.router.SaRouter;
 import cn.dev33.satoken.stp.StpUtil;
+import cn.dev33.satoken.util.SaResult;
 import cn.hdj.admin.service.IMenuService;
 import cn.hdj.common.consts.SysConst;
 import cn.hdj.common.domain.dto.RoleMenuPermissionDTO;
 import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.util.StrUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 

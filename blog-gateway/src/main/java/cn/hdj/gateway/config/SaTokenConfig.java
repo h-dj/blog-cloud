@@ -1,5 +1,6 @@
 package cn.hdj.gateway.config;
 
+import cn.dev33.satoken.exception.NotLoginException;
 import cn.dev33.satoken.reactor.context.SaReactorSyncHolder;
 import cn.dev33.satoken.reactor.filter.SaReactorFilter;
 import cn.dev33.satoken.router.SaRouter;
@@ -18,6 +19,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ServerWebExchange;
+
 import java.util.Map;
 
 /**
@@ -73,8 +75,13 @@ public class SaTokenConfig {
                     //响应JSON
                     ServerWebExchange exchange = SaReactorSyncHolder.getContext();
                     exchange.getResponse().getHeaders().set("Content-Type", ContentType.JSON.getValue());
+                    if (e instanceof NotLoginException) {
+                        exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
+                        return JSONUtil.toJsonStr(ResultVO.errorJson(e.getMessage(), ResponseCodeEnum.NO_AUTH.getCode()));
+                    }
                     exchange.getResponse().setStatusCode(HttpStatus.FORBIDDEN);
                     return JSONUtil.toJsonStr(ResultVO.errorJson(e.getMessage(), ResponseCodeEnum.FORBIDDEN.getCode()));
+
                 })
                 ;
     }
