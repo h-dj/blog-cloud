@@ -159,7 +159,6 @@
 
     <build>
         <resources>
-            <!-- 处理application.yml　文件中的变量-->
             <resource>
                 <directory>src/main/resources</directory>
                 <filtering>true</filtering>

@@ -12,6 +12,7 @@ import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,6 +29,7 @@ import java.util.List;
 @Api(tags = "菜单管理")
 @RestController
 @RequestMapping("/api/admin/menus")
+@Slf4j
 public class MenuController {
 
     @Autowired
@@ -38,7 +40,7 @@ public class MenuController {
     @ApiOperation(value = "获取侧边栏导航", httpMethod = "GET", response = ResultVO.class)
     public ResultVO nav() {
         long loginIdAsLong = StpUtil.getLoginIdAsLong();
-
+        log.info("获取侧边栏导航");
         return ResultVO.successJson(this.service.listForUser(loginIdAsLong));
     }
 

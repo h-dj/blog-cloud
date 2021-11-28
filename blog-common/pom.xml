@@ -76,5 +76,17 @@
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-core</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>log4j-over-slf4j</artifactId>
+        </dependency>
+
+        <!--TLog 日志追踪-->
+        <dependency>
+            <groupId>com.yomahub</groupId>
+            <artifactId>tlog-all-spring-boot-starter</artifactId>
+            <version>${tlog.version}</version>
+        </dependency>
+
     </dependencies>
 </project>

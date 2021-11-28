@@ -60,3 +60,8 @@ spring:
         max-idle: 10
         # 连接池中的最小空闲连接
         min-idle: 0
+# tlog 日志
+tlog:
+  pattern: '[$preApp][$preIp][$spanId][$traceId]'
+  enable-invoke-time-print: true
+  id-generator: 'cn.hdj.common.config.UUIDTLogIdGenerator'

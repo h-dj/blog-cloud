@@ -64,3 +64,8 @@ sa-token:
 feign:
   okhttp:
     enabled: true
+# tlog 日志
+tlog:
+  pattern: '[$preApp][$preIp][$spanId][$traceId]'
+  enable-invoke-time-print: true
+  id-generator: 'cn.hdj.common.config.UUIDTLogIdGenerator'

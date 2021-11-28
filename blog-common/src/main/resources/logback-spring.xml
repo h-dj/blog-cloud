@@ -5,9 +5,17 @@
                  当scan为true时，此属性生效。默认的时间间隔为1分钟。 -->
 <!-- debug:当此属性设置为true时，将打印出logback内部日志信息，实时查看logback运行状态。默认值为false。 -->
 <configuration  scan="true" scanPeriod="60 seconds">
-    <contextName>hdj</contextName>
+    <contextName>${APP_NAME}</contextName>
+
+    <springProperty name="APP_NAME" scope="context" source="spring.application.name"/>
+    <springProperty name="LOG_FILE" scope="context" source="logging.file" defaultValue="logs/${APP_NAME}"/>
+    <springProperty name="LOG_MAXFILESIZE" scope="context" source="logback.filesize" defaultValue="50MB"/>
+    <springProperty name="LOG_FILEMAXDAY" scope="context" source="logback.filemaxday" defaultValue="7"/>
+    <springProperty name="ServerIP" scope="context" source="spring.cloud.client.ip-address" defaultValue="0.0.0.0"/>
+    <springProperty name="ServerPort" scope="context" source="server.port" defaultValue="0000"/>
+
     <!-- name的值是变量的名称，value的值时变量定义的值。通过定义的值会被插入到logger上下文中。定义后，可以使“${}”来使用变量。 -->
-    <property name="log.path" value="~/blog/logs"/>
+    <property name="log.path" value="${LOG_FILE}"/>
 
     <!--0. 日志格式和颜色渲染 -->
     <!-- 彩色日志依赖的渲染类 -->
@@ -15,7 +23,8 @@
     <conversionRule conversionWord="wex" converterClass="org.springframework.boot.logging.logback.WhitespaceThrowableProxyConverter" />
     <conversionRule conversionWord="wEx" converterClass="org.springframework.boot.logging.logback.ExtendedWhitespaceThrowableProxyConverter" />
     <!-- 彩色日志格式 -->
-    <property name="CONSOLE_LOG_PATTERN" value="${CONSOLE_LOG_PATTERN:-%clr(%d{yyyy-MM-dd HH:mm:ss.SSS} %contextName ) [%thread] %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr(${PID:- }){magenta} %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}}"/>
+    <property name="CONSOLE_LOG_PATTERN" value="${CONSOLE_LOG_PATTERN:-%clr(%d{yyyy-MM-dd HH:mm:ss.SSS} ${APP_NAME} ) %X{tl} [%thread] %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr(${PID:- }){magenta} %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}}"/>
+    <property name="LOG_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS}  ${APP_NAME}  %X{tl}  [%thread]  %-5level  %logger{50}-%method:%line  %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}}"/>
 
 
     <!--1. 输出到控制台-->
@@ -24,10 +33,9 @@
         <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
             <level>debug</level>
         </filter>
-        <encoder>
-            <Pattern>${CONSOLE_LOG_PATTERN}</Pattern>
-            <!-- 设置字符集 -->
-            <charset>UTF-8</charset>
+        <!--这里替换成AspectLogbackEncoder-->
+        <encoder class="com.yomahub.tlog.core.enhance.logback.AspectLogbackEncoder">
+            <pattern>${CONSOLE_LOG_PATTERN}</pattern>
         </encoder>
     </appender>
 
@@ -45,19 +53,19 @@
         <!-- 正在记录的日志文档的路径及文档名 -->
         <file>${log.path}/blog_debug.log</file>
         <!--日志文档输出格式-->
-        <encoder>
-            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50}-%line  - %msg%n</pattern>
+        <encoder class="com.yomahub.tlog.core.enhance.logback.AspectLogbackEncoder">
+            <pattern>${LOG_PATTERN}</pattern>
             <charset>UTF-8</charset> <!-- 设置字符集 -->
         </encoder>
         <!-- 日志记录器的滚动策略，按日期，按大小记录 -->
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!-- 日志归档 -->
-            <fileNamePattern>${log.path}/blog-debug-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <fileNamePattern>${log.path}/blog_debug-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
             <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
-                <maxFileSize>100MB</maxFileSize>
+                <maxFileSize>${LOG_MAXFILESIZE}</maxFileSize>
             </timeBasedFileNamingAndTriggeringPolicy>
             <!--日志文档保留天数-->
-            <maxHistory>15</maxHistory>
+            <maxHistory>${LOG_FILEMAXDAY}</maxHistory>
         </rollingPolicy>
         <!-- 此日志文档只记录debug级别的 -->
         <filter class="ch.qos.logback.classic.filter.LevelFilter">
@@ -72,19 +80,19 @@
         <!-- 正在记录的日志文档的路径及文档名 -->
         <file>${log.path}/blog_info.log</file>
         <!--日志文档输出格式-->
-        <encoder>
-            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50}-%line  - %msg%n</pattern>
+        <encoder class="com.yomahub.tlog.core.enhance.logback.AspectLogbackEncoder">
+            <pattern>${LOG_PATTERN}</pattern>
             <charset>UTF-8</charset>
         </encoder>
         <!-- 日志记录器的滚动策略，按日期，按大小记录 -->
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!-- 每天日志归档路径以及格式 -->
-            <fileNamePattern>${log.path}/blog-info-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <fileNamePattern>${log.path}/blog_info-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
             <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
-                <maxFileSize>100MB</maxFileSize>
+                <maxFileSize>${LOG_MAXFILESIZE}</maxFileSize>
             </timeBasedFileNamingAndTriggeringPolicy>
             <!--日志文档保留天数-->
-            <maxHistory>10</maxHistory>
+            <maxHistory>${LOG_FILEMAXDAY}</maxHistory>
         </rollingPolicy>
         <!-- 此日志文档只记录info级别的 -->
         <filter class="ch.qos.logback.classic.filter.LevelFilter">
@@ -99,18 +107,18 @@
         <!-- 正在记录的日志文档的路径及文档名 -->
         <file>${log.path}/blog_warn.log</file>
         <!--日志文档输出格式-->
-        <encoder>
-            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50}-%line  - %msg%n</pattern>
+        <encoder class="com.yomahub.tlog.core.enhance.logback.AspectLogbackEncoder">
+            <pattern>${LOG_PATTERN}</pattern>
             <charset>UTF-8</charset> <!-- 此处设置字符集 -->
         </encoder>
         <!-- 日志记录器的滚动策略，按日期，按大小记录 -->
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <fileNamePattern>${log.path}/blog_warn-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
             <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
-                <maxFileSize>100MB</maxFileSize>
+                <maxFileSize>${LOG_MAXFILESIZE}</maxFileSize>
             </timeBasedFileNamingAndTriggeringPolicy>
             <!--日志文档保留天数-->
-            <maxHistory>15</maxHistory>
+            <maxHistory>${LOG_FILEMAXDAY}</maxHistory>
         </rollingPolicy>
         <!-- 此日志文档只记录warn级别的 -->
         <filter class="ch.qos.logback.classic.filter.LevelFilter">
@@ -125,18 +133,18 @@
         <!-- 正在记录的日志文档的路径及文档名 -->
         <file>${log.path}/blog_error.log</file>
         <!--日志文档输出格式-->
-        <encoder>
-            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50}-%line  - %msg%n</pattern>
+        <encoder class="com.yomahub.tlog.core.enhance.logback.AspectLogbackEncoder">
+            <pattern>${LOG_PATTERN}</pattern>
             <charset>UTF-8</charset> <!-- 此处设置字符集 -->
         </encoder>
         <!-- 日志记录器的滚动策略，按日期，按大小记录 -->
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <fileNamePattern>${log.path}/blog_error-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
             <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
-                <maxFileSize>100MB</maxFileSize>
+                <maxFileSize>${LOG_MAXFILESIZE}</maxFileSize>
             </timeBasedFileNamingAndTriggeringPolicy>
             <!--日志文档保留天数-->
-            <maxHistory>15</maxHistory>
+            <maxHistory>${LOG_FILEMAXDAY}</maxHistory>
         </rollingPolicy>
         <!-- 此日志文档只记录ERROR级别的 -->
         <filter class="ch.qos.logback.classic.filter.LevelFilter">
@@ -145,6 +153,8 @@
             <onMismatch>DENY</onMismatch>
         </filter>
     </appender>
+
+
 
     <!--
         <logger>用来设置某一个包或者具体的某一个类的日志打印级别、
