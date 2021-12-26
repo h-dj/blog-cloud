@@ -20,7 +20,6 @@
         <dependency>
             <groupId>cn.dev33</groupId>
             <artifactId>sa-token-spring-boot-starter</artifactId>
-            <optional>true</optional>
         </dependency>
 
         <!-- web依赖 -->
@@ -30,7 +29,7 @@
             <optional>true</optional>
         </dependency>
 
-        <!--mybatis-plus 依赖不传递-->
+        <!--mybatis-plus-->
         <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-boot-starter</artifactId>
@@ -41,7 +40,6 @@
         <dependency>
             <groupId>com.github.xiaoymin</groupId>
             <artifactId>knife4j-spring-boot-starter</artifactId>
-            <optional>true</optional>
         </dependency>
 
         <!--hutool 工具集-->

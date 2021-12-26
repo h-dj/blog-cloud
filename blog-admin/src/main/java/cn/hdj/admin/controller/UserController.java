@@ -50,8 +50,8 @@ public class UserController {
      * @return
      */
     @Deprecated
-//    @PostMapping(value = "/signIn")
-//    @ApiOperation(value = "登陆", httpMethod = "POST", response = ResultVO.class)
+    @PostMapping(value = "/signIn")
+    @ApiOperation(value = "登陆", httpMethod = "POST", response = ResultVO.class)
     public ResultVO login(@RequestBody LoginFormDTO user, HttpServletResponse response) {
         SaTokenInfo login = this.service.login(user);
         return ResultVO.successJson(login);

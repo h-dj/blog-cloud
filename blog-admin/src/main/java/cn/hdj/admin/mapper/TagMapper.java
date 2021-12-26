@@ -2,6 +2,9 @@ package cn.hdj.admin.mapper;
 
 import cn.hdj.admin.po.TagPO;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * <p>
@@ -13,4 +16,11 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  */
 public interface TagMapper extends BaseMapper<TagPO> {
 
+    /**
+     * 获取文章标签
+     *
+     * @param articleId
+     * @return
+     */
+    List<TagPO> getTagListByArticleId(@Param("articleId") Long articleId);
 }

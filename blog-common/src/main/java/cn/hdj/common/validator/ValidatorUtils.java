@@ -33,7 +33,7 @@ public final class ValidatorUtils {
         Set<ConstraintViolation<Object>> constraintViolations = validator.validate(object, groups);
         if (!constraintViolations.isEmpty()) {
             String msg = constraintViolations.stream().map(constant -> constant.getMessage()).collect(Collectors.joining(","));
-            throw new BaseException(msg, ResponseCodeEnum.UNKNOWN.getCode());
+            throw new BaseException(msg, ResponseCodeEnum.PARAM_INVALID.getCode());
         }
     }
 }

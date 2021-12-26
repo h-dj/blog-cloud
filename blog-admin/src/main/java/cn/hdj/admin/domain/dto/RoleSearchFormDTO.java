@@ -7,8 +7,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 /**
- * @author hdj
- * @date 2019/7/21 17:43
+ * @author huangjiajian
  * @Version 1.0
  * @Description:
  */

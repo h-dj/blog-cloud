@@ -197,29 +197,23 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserPO> implements 
         }
 
         //查询用户
-        List<UserPO> list = this.list(Wrappers.<UserPO>lambdaQuery()
-                .eq(UserPO::getEmail, user.getAccount())
-                .eq(UserPO::getDeleted, false)
-        );
-        if (CollectionUtil.isEmpty(list)) {
-            throw new AccountInValidException("账号或密码错误！");
-        }
-        if (list.size() > 1) {
-            throw new AccountInValidException();
-        }
-        UserPO userPO = list.get(0);
-        if (userPO.getDeleted()) {
+        UserDetailDTO userDetailDTO = this.loadUserByUsername(user.getAccount());
+        if (userDetailDTO.getDeleted()) {
             throw new AccountInValidException("账号已注销！");
         }
-        if (!BooleanUtil.isTrue(userPO.getEnable())) {
+        if (!BooleanUtil.isTrue(userDetailDTO.getEnable())) {
             throw new AccountInValidException("账号被禁用！");
         }
-        String encryptPassword = SaSecureUtil.md5BySalt(user.getPassword(), userPO.getSalt());
-        if (!StrUtil.equals(encryptPassword, userPO.getPassword())) {
+        String encryptPassword = SaSecureUtil.md5BySalt(user.getPassword(), userDetailDTO.getSalt());
+        if (!StrUtil.equals(encryptPassword, userDetailDTO.getPassword())) {
             throw new AccountInValidException("账号或密码错误！");
         }
+        userDetailDTO.setPassword(null);
         //保存当前登录的userID
-        StpUtil.login(userPO.getId());
+        StpUtil.login(userDetailDTO.getId());
+        StpUtil.getSession(false)
+                .set(SysConst.LOGIN_USER_PREFIX + userDetailDTO.getId(), userDetailDTO);
+
         //返回token
         return StpUtil.getTokenInfo();
     }
@@ -233,15 +227,16 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserPO> implements 
     public UserDetailDTO loadUserByUsername(String account) {
 
         LambdaQueryWrapper<UserPO> queryWrapper = Wrappers.<UserPO>lambdaQuery()
-                .eq(UserPO::getDeleted,false)
-                .eq(UserPO::getEnable,true)
+                .eq(UserPO::getDeleted, false)
+                .eq(UserPO::getEnable, true)
                 .eq(UserPO::getEmail, account);
         List<UserPO> userPOList = this.baseMapper.selectList(queryWrapper);
         if (CollectionUtil.isEmpty(userPOList)) {
             throw new UserNotFoundException();
         }
         if (userPOList.size() > 1) {
-            throw new AccountInValidException("账号重复 " + account);
+            log.error("账号重复: " + account);
+            throw new AccountInValidException("账号或密码错误！");
         }
         UserDetailDTO userDetailDTO = BeanUtil.copyProperties(userPOList.get(0), UserDetailDTO.class);
 

@@ -2,4 +2,9 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.hdj.admin.mapper.TagMapper">
 
+    <select id="getTagListByArticleId" resultType="cn.hdj.admin.po.TagPO">
+        SELECT * FROM t_tag t
+        LEFT JOIN t_tag_article ta on t.id = ta.tag_id
+        WHERE ta.article_id = #{articleId}
+    </select>
 </mapper>

@@ -45,7 +45,6 @@
         <module>blog-gateway</module>
         <module>blog-auth</module>
         <module>blog-monitor</module>
-        <module>blog-search</module>
         <module>blog-portal</module>
     </modules>
 

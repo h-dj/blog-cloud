@@ -187,6 +187,7 @@
     <!-- 4.1 开发环境:打印控制台-->
     <springProfile name="dev">  <!-- 设置指定包下的级别，这样的话  就可以在控制台输出sql语句了 -->
         <logger name="cn.hdj.admin.mapper" level="debug"/>
+        <logger name="cn.hdj.portal.mapper" level="debug"/>
     </springProfile>
 
     <root level="info">

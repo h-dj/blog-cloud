@@ -3,9 +3,8 @@ package cn.hdj.admin.domain.dto;
 import lombok.Data;
 
 /**
- * @author hdj
+ * @author huangjiajian
  * @version 1.0
- * @date 2019/9/8 16:59
  * @description:
  */
 @Data

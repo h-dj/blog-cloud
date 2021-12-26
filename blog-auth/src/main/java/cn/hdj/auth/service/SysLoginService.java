@@ -5,12 +5,11 @@ import cn.dev33.satoken.session.SaSession;
 import cn.dev33.satoken.stp.SaTokenInfo;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hdj.auth.feign.AdminUserFeignService;
+import cn.hdj.common.consts.SysConst;
 import cn.hdj.common.domain.dto.LoginFormDTO;
-import cn.hdj.common.domain.dto.RegisterFormDTO;
 import cn.hdj.common.domain.dto.UserDetailDTO;
 import cn.hdj.common.domain.vo.ResultVO;
 import cn.hdj.common.exception.AccountInValidException;
-import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.BooleanUtil;
 import cn.hutool.core.util.StrUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -58,7 +57,8 @@ public class SysLoginService {
 
         //保存当前用户登录的 权限
         StpUtil.getSessionByLoginId(data.getId())
-                .set(SaSession.PERMISSION_LIST,data.getPermissions());
+                .set(SysConst.LOGIN_USER_PREFIX + data.getId(), data)
+                .set(SaSession.PERMISSION_LIST, data.getPermissions());
 
         //返回token
         return StpUtil.getTokenInfo();

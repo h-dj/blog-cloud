@@ -1,0 +1,84 @@
+server:
+  port: 8185
+spring:
+  profiles:
+    active: '@profile.active@'
+  application:
+    name: blog-portal
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    druid:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      username: 'blog'
+      password: '123456'
+      url: 'jdbc:mysql://127.0.0.1:3306/blog?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=GMT%2B8'
+      stat-view-servlet:
+        enabled: true
+        login-password: 123456
+        login-username: admin
+        url-pattern: /druid/*
+  # redis配置
+  redis:
+    # Redis数据库索引（默认为0）
+    database: 0
+    # Redis服务器地址
+    host: 127.0.0.1
+    # Redis服务器连接端口
+    port: 6379
+    # Redis服务器连接密码（默认为空）
+    password: 123456
+    # 连接超时时间
+    timeout: 10s
+    lettuce:
+      pool:
+        # 连接池最大连接数
+        max-active: 200
+        # 连接池最大阻塞等待时间（使用负值表示没有限制）
+        max-wait: -1ms
+        # 连接池中的最大空闲连接
+        max-idle: 10
+        # 连接池中的最小空闲连接
+        min-idle: 0
+  cloud:
+    nacos:
+      discovery:
+        #注册中心地址
+        server-addr: http://127.0.0.1:8848
+        metadata:
+          # 在获取服务实例时，验证用户名密码
+          user-name: ${spring.boot.admin.client.username}
+          user-password: ${spring.boot.admin.client.password}
+      config:
+        # 配置中心地址
+        server-addr: http://127.0.0.1:8848
+        # 修改文件扩展名
+        file-extension: yaml
+        # 缺省即可
+        group: DEFAULT_GROUP
+        # 缺省即可: 配置文件名前缀
+        prefix: ${spring.application.name}
+    bootstrap:
+      enabled: false
+  boot:
+    admin:
+      client:
+        password: admin001
+        username: admin
+
+mybatis-plus:
+  mapper-locations: classpath*:/mapper/**/*.xml  #mapper.xml文件路径
+  configuration:
+    map-underscore-to-camel-case: true #驼峰
+
+# 配置暴露所有监控端点
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+
+# tlog 日志
+tlog:
+  pattern: '[$preApp][$preIp][$spanId][$traceId]'
+  enable-invoke-time-print: true
+  id-generator: 'cn.hdj.common.config.UUIDTLogIdGenerator'

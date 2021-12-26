@@ -11,7 +11,7 @@ spring:
       driver-class-name: com.mysql.cj.jdbc.Driver
       username: 'blog'
       password: '123456'
-      url: 'jdbc:mysql://192.168.43.178:3306/blog?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=GMT%2B8'
+      url: 'jdbc:mysql://127.0.0.1:3306/blog?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=GMT%2B8'
       stat-view-servlet:
         enabled: true
         login-password: 123456
@@ -22,7 +22,7 @@ spring:
     # Redis数据库索引（默认为0）
     database: 0
     # Redis服务器地址
-    host: 192.168.43.178
+    host: 127.0.0.1
     # Redis服务器连接端口
     port: 6379
     # Redis服务器连接密码（默认为空）
@@ -43,14 +43,14 @@ spring:
     nacos:
       discovery:
         #注册中心地址
-        server-addr: http://192.168.43.178:8848
+        server-addr: http://127.0.0.1:8848
         metadata:
           # 在获取服务实例时，验证用户名密码
           user-name: ${spring.boot.admin.client.username}
           user-password: ${spring.boot.admin.client.password}
       config:
         # 配置中心地址
-        server-addr: http://192.168.43.178:8848
+        server-addr: http://127.0.0.1:8848
         # 修改文件扩展名
         file-extension: yaml
         # 缺省即可
@@ -97,7 +97,6 @@ management:
         include: '*'
 # tlog 日志
 tlog:
-
   pattern: '[$preApp][$preIp][$spanId][$traceId]'
   enable-invoke-time-print: true
   id-generator: 'cn.hdj.common.config.UUIDTLogIdGenerator'
